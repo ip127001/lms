@@ -1,15 +1,40 @@
 import React, { Component } from 'react';
 
 import Aux from '../../hoc/Aux/Aux';
+import IssueBook from '../../components/IssueBook/IssueBook';
+import Form from '../../components/IssueBook/Form/Form';
+import Modal from '../../components/UI/Modal/Modal';
+import StudentSummary from '../../components/IssueBook/StudentSummary/StudentSummary';
 
 class IssueBooks extends Component {
+    state = {
+        studentInfo: {
+            name: 'rohit',
+            roll: 'bt15cs018',
+            branch: 'cse',
+            semester: '8th'
+        },
+        issuing: false
+    }
+
+    IssueHandler = () => {
+        this.setState({issuing: true})
+    }
+
+    IssueCancelHandler = () => {
+        this.setState({issuing: false})
+    }
+    
     render() {
         return( 
             <Aux>
-                <div>search</div>
-                <div>form of issuing</div>
+                <Modal show={this.state.issuing} modalClosed={this.IssueCancelHandler}>
+                    <StudentSummary />
+                </Modal>
+                <IssueBook />
+                <Form issued={this.IssueHandler} />
             </Aux>
-        )
+        );
     }
 }
 

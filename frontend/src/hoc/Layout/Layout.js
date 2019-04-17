@@ -1,9 +1,9 @@
 import React from 'react';
-import Aux from '../../hoc/Aux/Aux';
+import Aux from '../Aux/Aux';
 
 import classes from './Layout.css';
 
-const layout = (props) => (
+const Layout = (props) => (
     <Aux>
         <div>toolbar, sidedrawer, backdrop</div>
         <main className={classes.Content}>
@@ -12,4 +12,4 @@ const layout = (props) => (
     </Aux>
 )
 
-export default layout; 
+export default Layout; 
