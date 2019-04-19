@@ -5,10 +5,27 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
-const bookRoutes = require('./routes/book');
-const authRoutes = require('./routes/auth');
+// const bookRoutes = require('./routes/book');
+// const authRoutes = require('./routes/auth');
 
 const app = express();
+
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString() + '_' + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'png' || file.mimetype === 'jpg' || file.mimetype === 'jpeg') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
 
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
@@ -22,8 +39,8 @@ app.use((req, res, next) => {
     next();;
 });
 
-app.use('/book', bookRoutes);
-app.use('/auth', authRoutes);
+// app.use('/book', bookRoutes);
+// app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
@@ -32,7 +49,7 @@ app.use((error, req, res, next) => {
     res.status().json({message: message, data: data});
 });
 
-mongoose.connect('mongodb+srv://rk:9pnwE86CrIBYXaWH@ecommerce-rs4wl.mongodb.net/messages?retryWrites=true')
+mongoose.connect('mongodb+srv://rk:9pnwE86CrIBYXaWH@ecommerce-rs4wl.mongodb.net/library?retryWrites=true')
     .then(result => {
         app.listen(8080);
     })
