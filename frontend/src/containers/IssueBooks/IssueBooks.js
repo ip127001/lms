@@ -21,6 +21,10 @@ class IssueBooks extends Component {
         this.setState({issuing: true})
     }
 
+    IssueSuccessHandler = () => {
+        alert('you succeded');
+    }
+
     IssueCancelHandler = () => {
         this.setState({issuing: false})
     }
@@ -29,9 +33,11 @@ class IssueBooks extends Component {
         return( 
             <Aux>
                 <Modal show={this.state.issuing} modalClosed={this.IssueCancelHandler}>
-                    <StudentSummary />
+                    <StudentSummary issueSuccessHandler={this.IssueSuccessHandler} issueCancelHandler={this.IssueCancelHandler}/>
                 </Modal>
+
                 <IssueBook />
+
                 <Form issued={this.IssueHandler} />
             </Aux>
         );
