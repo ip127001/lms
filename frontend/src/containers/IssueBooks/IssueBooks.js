@@ -5,6 +5,8 @@ import IssueBook from '../../components/IssueBook/IssueBook';
 import Form from '../../components/IssueBook/Form/Form';
 import Modal from '../../components/UI/Modal/Modal';
 import StudentSummary from '../../components/IssueBook/StudentSummary/StudentSummary';
+import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+import axios from '../../axios-orders';
 
 class IssueBooks extends Component {
     state = {
@@ -44,4 +46,4 @@ class IssueBooks extends Component {
     }
 }
 
-export default IssueBooks;
+export default WithErrorHandler(IssueBooks, axios);
