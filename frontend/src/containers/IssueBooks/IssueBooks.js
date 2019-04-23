@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 
 import Aux from '../../hoc/Aux/Aux';
 import IssueBook from '../../components/IssueBook/IssueBook';
-import Form from '../../components/IssueBook/Form/Form';
 import Modal from '../../components/UI/Modal/Modal';
 import StudentSummary from '../../components/IssueBook/StudentSummary/StudentSummary';
 import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
-import axios from '../../axios-orders';
+import axios from '../../axios-issue';
 
 class IssueBooks extends Component {
     state = {
@@ -38,9 +37,7 @@ class IssueBooks extends Component {
                     <StudentSummary issueSuccessHandler={this.IssueSuccessHandler} issueCancelHandler={this.IssueCancelHandler}/>
                 </Modal>
 
-                <IssueBook />
-
-                <Form issued={this.IssueHandler} />
+                <IssueBook issued={this.IssueHandler} />
             </Aux>
         );
     }

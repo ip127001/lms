@@ -10,9 +10,9 @@ class StudentSummary extends Component {
                 <ul>
                     <li>hi</li>
                 </ul>
-                <p>continue to checkout</p>
+                <p>Confirm to issue the book</p>
                 <Button btnType="Danger" clicked={this.props.issueCancelHandler}>Cancel</Button>
-                <Button btnType="Success" clicked={this.props.issueSuccessHandler}>Success</Button>
+                <Button btnType="Success" clicked={this.props.issueSuccessHandler}>Confirm</Button>
             </Aux>
         );
     }
