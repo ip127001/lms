@@ -1,0 +1,59 @@
+.StudentSearch {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: 4%;
+    height: 120px;
+}
+
+.Label {
+    font-weight: lighter;
+    float: left;
+    width: 30%;
+    margin: 1.2% 0%;
+    padding-left: 200px;
+}
+
+.Label label {
+    font: 24px;
+}
+
+.Button {
+    float: left;
+    width: 20%;
+    padding-left: 2%;
+}
+.Input {
+    width: 40%;
+    float: left;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.InputElement {
+    outline: none;
+    border: 1px solid #ccc;
+    background-color: white;
+    font: inherit;
+    padding: 6px 10px;
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.InputElement:focus{
+    outline: none;
+    background-color: white;
+    border: 1.2 px solid blue;
+}
+
+.Invalid {
+    border: 1px solid red;
+    background-color: salmon;
+}
+
+.ValidationError {
+    color: red;
+    margin: 5px 0;
+} 
