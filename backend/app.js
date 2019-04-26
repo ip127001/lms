@@ -5,8 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
-// const bookRoutes = require('./routes/book');
-// const authRoutes = require('./routes/auth');
+const bookRoutes = require('./routes/book');
 
 const app = express();
 
@@ -27,7 +26,6 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'));
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -39,8 +37,7 @@ app.use((req, res, next) => {
     next();;
 });
 
-// app.use('/book', bookRoutes);
-// app.use('/auth', authRoutes);
+app.use('/books', bookRoutes);
 
 app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
