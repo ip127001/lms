@@ -1,0 +1,27 @@
+.IssueBooks {
+    margin-top: 2%;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 3px #ccc;
+    border: 1px solid #eee;
+    background-color: #f2f2f2;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+@media (min-width: 600px) {
+    .IssueBooks {
+        width: 90%;
+        float: left;
+        margin-left: 5%;
+    }
+}
+
+.Form {
+    width: 100%;
+    height: auto;
+}
+
+.Button {
+    margin: 0px;
+}

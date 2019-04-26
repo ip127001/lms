@@ -10,7 +10,7 @@ class StudentInfo extends Component {
         branch: '',
         semester: '',
         books: [],
-        totalFine: null
+        totalFine: 0
     }
 
     render() {
