@@ -30,6 +30,30 @@
     margin-right: 10px;
 }
 
+@media (max-width: 600px) {
+    .StudentSearch {
+        padding: 10px;
+        margin-top: 12%;
+        margin-bottom: 5%;
+    }
+    .Label {
+        width: 50%;
+        margin-top: 6%;
+        padding-left: 10px;
+    }
+    .Input {
+        width: 47%;
+        float: left;
+        padding: 10px;
+        margin-top: 2%;
+    }    
+    .Button {
+        float: none;
+        width: 20%;
+        margin: auto;
+    }
+}
+
 .InputElement {
     outline: none;
     border: 1px solid #ccc;
@@ -57,3 +81,4 @@
     color: red;
     margin: 5px 0;
 } 
+
