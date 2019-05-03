@@ -72,7 +72,7 @@ class StudentInfo extends Component {
                     type: 'number',
                     placeholder: 'fine associated with book'
                 },
-                value: '',
+                value: 0,
                 validation: {
                     required: true,
                     isNumber: true
