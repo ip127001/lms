@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 
 import classes from './BooksSearch.css';
 
-import Aux from '../../hoc/Aux/Aux';
-
 import StudentSearch from '../../components/Student/StudentSearch/StudentSearch';
+import Book from '../../components/Book/Book/Book';
 
 import { checkValidity } from '../../shared/utility';
-import Spinner from '../../components/UI/Spinner/Spinner';
+// import Spinner from '../../components/UI/Spinner/Spinner';
 
 import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
 import axios from '../../axios-library';
@@ -22,8 +21,9 @@ class BooksSearch extends Component {
             touched: false,           
             value: ''
         },
-        studentBooks: [],
-        formIsValid: false,
+        filter: 'tag',
+        books: [],
+        clickedBook: false,
         loading: false
     }
 
@@ -38,30 +38,32 @@ class BooksSearch extends Component {
         this.setState({searchData: updatedSearchData});
     }
 
+    selectChangedHandler = (event) => {
+        const filter = event.target.value;
+        this.setState({filter: filter});
+    }
+
+
     searchSubmitHandler = (event) => {
         event.preventDefault();
         this.setState({loading: true});
         const searchObj = {
-            "search": this.state.searchData.value.toLowerCase()
+            "search": this.state.searchData.value.toLowerCase(),
+            "filter": this.state.filter
         }
         console.log(searchObj);
 
-        axios.post('/book/search', searchObj)
+        axios.post('/book/books', searchObj)
             .then(result => {
+                this.setState({loading: true});
                 console.log("search result", result);
 
                 let arr = [];
-                result.data.studentInfo.books.map(book => {
-                    console.log(book);
+                result.data.books.map(book => {
                     return arr.push(book);
                 });
                 
-                const updatedSearchData = {
-                    ...this.state.searchData
-                }
-                updatedSearchData.value = '';
-
-                this.setState({studentBooks: arr, searchData: updatedSearchData});
+                this.setState({books: arr});
                 this.setState({loading: false});
             })
             .catch(err => {
@@ -70,20 +72,41 @@ class BooksSearch extends Component {
             });
     }
 
+    selectedBookHandler(name) {
+        console.log('name', name);
+        let click = !this.state.clickedBook;
+        this.setState({clickedBook: click});
+    }
     render() {
+        let books = null;
+        books = this.state.books.map(book => {
+            return <Book    
+                        bookInfo={book} 
+                        key={book.id} 
+                        click={this.state.clickedBook} 
+                        clicked={this.selectedBookHandler.bind(this, book.name)}/>
+        })
 
         return( 
-            <Aux>
+            <div className={classes.BooksSearch}>
                 <StudentSearch searchStudentHandler={this.searchSubmitHandler} 
-                            value={this.state.searchData.value} 
-                            changed={(event) => this.searchInputChangedHandler(event)}
-                            invalid={!this.state.searchData.valid} 
-                            touched={this.state.searchData.touched} 
-                            disabled={!this.state.formIsValid} />
+                        value={this.state.searchData.value} 
+                        changed={(event) => this.searchInputChangedHandler(event)}
+                        invalid={!this.state.searchData.valid} 
+                        touched={this.state.searchData.touched}
+                        label="Enter Book Keyword" 
+                        select
+                        selectChanged={(event) => this.selectChangedHandler(event)}
+                        />
+            
+            <div style={{textAlign: "center"}}>
+                Available books in the library
+            </div>
 
-                
-            </Aux>
-            );
+            {books}
+
+            </div>
+        );
     }
 }
 
