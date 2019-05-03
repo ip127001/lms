@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classes from './IssueBooks.css';
 
-import Modal from '../../components/UI/Modal/Modal';
+// import Modal from '../../components/UI/Modal/Modal';
 import Aux from '../../hoc/Aux/Aux';
 
 import StudentBooks from '../../components/Student/StudentBooks/StudentBooks';
@@ -10,9 +10,10 @@ import StudentSearch from '../../components/Student/StudentSearch/StudentSearch'
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import { checkValidity } from '../../shared/utility';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
-import axios from '../../axios-issue';
+import axios from '../../axios-library';
 
 class IssueBooks extends Component {
     state = {
@@ -25,20 +26,6 @@ class IssueBooks extends Component {
                 },
                 validation: {
                     required: true
-                },
-                valid: false,
-                touched: false,
-                value: ''
-            },
-            email: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'email',
-                    placeholder: 'Your mail'
-                },
-                validation: {
-                    required: true,
-                    isEmail: true
                 },
                 valid: false,
                 touched: false,
@@ -72,6 +59,21 @@ class IssueBooks extends Component {
                 touched: false,
                 value: ''
             },
+            bookId: {   
+                elementType: 'input',
+                elementConfig: {
+                    type: 'number',
+                    placeholder: 'Book ID'
+                },
+                validation: {
+                    required: true,
+                    minLength: 4,
+                    maxLength: 6
+                },
+                valid: false,
+                touched: false,
+                value: ''
+            },
             branch: {
                 elementType: 'select',
                 elementConfig: {
@@ -85,23 +87,6 @@ class IssueBooks extends Component {
                 },
                 value: 'cse',
                 valid: true
-            },
-            bookId: {   
-                elementType: 'input',
-                elementConfig: {
-                    type: 'number',
-                    placeholder: 'Book ID'
-                },
-                validation: {
-                    required: true,
-                    isEmail: true,
-                    isNumeric: true,
-                    minLength: 4,
-                    maxLength: 6
-                },
-                valid: false,
-                touched: false,
-                value: ''
             },
             dateOfIssue: {
                 elementType: 'input',
@@ -162,7 +147,6 @@ class IssueBooks extends Component {
         updatedSearchData.valid = checkValidity(updatedSearchData.value, updatedSearchData.validation);
         updatedSearchData.touched = true;
         this.setState({searchData: updatedSearchData});
-        console.log(event.target.value);
     }
 
     formSubmitHandler = (event) => {
@@ -172,24 +156,133 @@ class IssueBooks extends Component {
         for (let formElementIdentifier in this.state.studentInfo) {
             formData[formElementIdentifier] = this.state.studentInfo[formElementIdentifier].value
         }
+        let date = formData.dateOfIssue;
+        let today = new Date(date);
+        let tomorrow = new Date(today.setMonth(today.getMonth() + 1));
+        formData.dateOfIssue = tomorrow.toDateString();
         console.log('formData=', formData);
-        axios.post('/', formData)
-            .then()
-            .catch();
+
+        axios.post('/book/students', formData)
+            .then(result => {
+                console.log('issuebooks result', result);
+                let arr = [];
+                result.data.student.books.map(book => {
+                    console.log(book);
+                    return arr.push(book);
+                });
+                const updatedStudentInfo = {
+                    ...this.state.studentInfo,
+                }
+
+                const updatedInfoElement1 = {
+                    ...updatedStudentInfo['name']
+                } 
+                updatedInfoElement1.value = '';
+                updatedStudentInfo['name'] = updatedInfoElement1;
+                
+                const updatedInfoElement2 = {
+                    ...updatedStudentInfo['roll']
+                } 
+                updatedInfoElement2.value = '';
+                updatedStudentInfo['roll'] = updatedInfoElement2;
+
+                const updatedInfoElement3 = {
+                    ...updatedStudentInfo['branch']
+                } 
+                updatedInfoElement3.value = '';
+                updatedStudentInfo['branch'] = updatedInfoElement3;
+
+                const updatedInfoElement4 = {
+                    ...updatedStudentInfo['semester']
+                } 
+                updatedInfoElement4.value = '';
+                updatedStudentInfo['semester'] = updatedInfoElement4;
+
+                const updatedInfoElement5 = {
+                    ...updatedStudentInfo['bookId']
+                } 
+                updatedInfoElement5.value = '';
+                updatedStudentInfo['bookId'] = updatedInfoElement4;
+
+                const updatedInfoElement6 = {
+                    ...updatedStudentInfo['dateOfIssue']
+                } 
+                updatedInfoElement6.value = '';
+                updatedStudentInfo['dateOfIssue'] = updatedInfoElement6;
+
+
+                this.setState({studentInfo: updatedStudentInfo, studentBooks: arr});
+                this.setState({loading: false});
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({loading: false});
+            });
     }
 
     searchSubmitHandler = (event) => {
         event.preventDefault();
         this.setState({loading: true});
-        const search = this.state.searchData.value.toUpperCase();
-        axios.post('/', search)
-            .then()
-            .catch();
+        const searchObj = {
+            "search": this.state.searchData.value.toLowerCase()
+        }
+        console.log(searchObj);
+
+        axios.post('/book/search', searchObj)
+            .then(result => {
+                console.log("search result", result);
+
+                const updatedStudentInfo = {
+                    ...this.state.studentInfo,
+                }
+
+                const updatedInfoElement1 = {
+                    ...updatedStudentInfo['name']
+                } 
+                updatedInfoElement1.value = result.data.studentInfo.name;
+                updatedStudentInfo['name'] = updatedInfoElement1;
+                
+                const updatedInfoElement2 = {
+                    ...updatedStudentInfo['roll']
+                } 
+                updatedInfoElement2.value = result.data.studentInfo.roll;
+                updatedStudentInfo['roll'] = updatedInfoElement2;
+
+                const updatedInfoElement3 = {
+                    ...updatedStudentInfo['branch']
+                } 
+                updatedInfoElement3.value = result.data.studentInfo.branch;
+                updatedStudentInfo['branch'] = updatedInfoElement3;
+
+                const updatedInfoElement4 = {
+                    ...updatedStudentInfo['semester']
+                } 
+                updatedInfoElement4.value = result.data.studentInfo.semester;
+                updatedStudentInfo['semester'] = updatedInfoElement4;
+
+                let arr = [];
+                result.data.studentInfo.books.map(book => {
+                    console.log(book);
+                    return arr.push(book);
+                });
+                
+                const updatedSearchData = {
+                    ...this.state.searchData
+                }
+                updatedSearchData.value = '';
+
+                this.setState({studentInfo: updatedStudentInfo, studentBooks: arr, searchData: updatedSearchData});
+                this.setState({loading: false});
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({loading: false})
+            });
     }
 
     render() {
         let formElementArray = [];
-
+        let studentBooks;
         for(let key in this.state.studentInfo) {
             formElementArray.push({
                 id: key,
@@ -211,36 +304,34 @@ class IssueBooks extends Component {
                         label={formElement.id}
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 })}
-
-                <div>
-                    <Button disabled={!this.state.formIsValid}>Submit</Button>
-                </div>
-
+                <Button>Submit</Button>
             </form>
         )
+
+        if (this.state.loading) {
+            studentBooks = <Spinner />
+        } else {
+            studentBooks = <StudentBooks books={this.state.studentBooks} />;
+        }
+
         return( 
             <Aux>
-                
-                    <StudentSearch searchStudentHandler={this.searchSubmitHandler} 
-                                value={this.state.searchData.value} 
-                                changed={(event) => this.searchInputChangedHandler(event)}
-                                invalid={!this.state.searchData.valid} 
-                                touched={this.state.searchData.touched} 
-                                disabled={!this.state.formIsValid} />
-                
-                
+                <StudentSearch searchStudentHandler={this.searchSubmitHandler} 
+                            value={this.state.searchData.value} 
+                            changed={(event) => this.searchInputChangedHandler(event)}
+                            invalid={!this.state.searchData.valid} 
+                            touched={this.state.searchData.touched} 
+                            disabled={!this.state.formIsValid} />
+
                 <div className={classes.IssueBooks}>
                     <h4>Issue the book</h4>
                     {form}
                 </div>
 
                 <div className={classes.IssueBooks}>
-                    <StudentBooks books={this.state.books} />
+                    {studentBooks}
                 </div>
                 
-                {/* <Modal show={this.state.issuing} modalClosed={this.IssueCancelHandler}>
-                    <StudentSummary issueSuccessHandler={this.IssueSuccessHandler} issueCancelHandler={this.IssueCancelHandler}/>
-                </Modal> */}
             </Aux>
             );
     }
