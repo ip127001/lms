@@ -3,7 +3,6 @@ import React from 'react';
 import classes from './studentBooks.css';
 
 const studentBooks = (props) => {
-    console.log('props', props.books);
     let tableContent;
     if(props.books) {
         tableContent = props.books.map(book => (
