@@ -10,9 +10,9 @@ const bookRoutes = require('./routes/book');
 
 const app = express();
 
-cron.schedule("1 * * * * *", function() {
-    console.log("running a task every minute");
-});
+// cron.schedule("1 * * * * *", function() {
+//     console.log("running a task every minute");
+// });
 
 
 const fileStorage = multer.diskStorage({
