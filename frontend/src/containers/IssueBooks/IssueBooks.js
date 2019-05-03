@@ -52,7 +52,6 @@ class IssueBooks extends Component {
                 },
                 validation: {
                     required: true,
-                    isNumeric: true,
                     maxLength: 1
                 },
                 valid: false,
@@ -135,7 +134,6 @@ class IssueBooks extends Component {
         for (let inputIdentifier in updatedStudentInfo) {
             formIsValid = updatedStudentInfo[inputIdentifier].valid && formIsValid;
         }
-
         this.setState({studentInfo: updatedStudentInfo, formIsValid: formIsValid});
     }
 
@@ -154,6 +152,7 @@ class IssueBooks extends Component {
         this.setState({loading: true});
         const formData = {};
         for (let formElementIdentifier in this.state.studentInfo) {
+            console.log(formElementIdentifier, this.state.studentInfo[formElementIdentifier].valid);
             formData[formElementIdentifier] = this.state.studentInfo[formElementIdentifier].value
         }
         let date = formData.dateOfIssue;
@@ -162,62 +161,62 @@ class IssueBooks extends Component {
         formData.dateOfIssue = tomorrow.toDateString();
         console.log('formData=', formData);
 
-        axios.post('/book/students', formData)
-            .then(result => {
-                console.log('issuebooks result', result);
-                let arr = [];
-                result.data.student.books.map(book => {
-                    console.log(book);
-                    return arr.push(book);
-                });
-                const updatedStudentInfo = {
-                    ...this.state.studentInfo,
-                }
+        // axios.post('/book/students', formData)
+        //     .then(result => {
+        //         console.log('issuebooks result', result);
+        //         let arr = [];
+        //         result.data.student.books.map(book => {
+        //             console.log(book);
+        //             return arr.push(book);
+        //         });
+        //         const updatedStudentInfo = {
+        //             ...this.state.studentInfo,
+        //         }
 
-                const updatedInfoElement1 = {
-                    ...updatedStudentInfo['name']
-                } 
-                updatedInfoElement1.value = '';
-                updatedStudentInfo['name'] = updatedInfoElement1;
+        //         const updatedInfoElement1 = {
+        //             ...updatedStudentInfo['name']
+        //         } 
+        //         updatedInfoElement1.value = '';
+        //         updatedStudentInfo['name'] = updatedInfoElement1;
                 
-                const updatedInfoElement2 = {
-                    ...updatedStudentInfo['roll']
-                } 
-                updatedInfoElement2.value = '';
-                updatedStudentInfo['roll'] = updatedInfoElement2;
+        //         const updatedInfoElement2 = {
+        //             ...updatedStudentInfo['roll']
+        //         } 
+        //         updatedInfoElement2.value = '';
+        //         updatedStudentInfo['roll'] = updatedInfoElement2;
 
-                const updatedInfoElement3 = {
-                    ...updatedStudentInfo['branch']
-                } 
-                updatedInfoElement3.value = '';
-                updatedStudentInfo['branch'] = updatedInfoElement3;
+        //         const updatedInfoElement3 = {
+        //             ...updatedStudentInfo['branch']
+        //         } 
+        //         updatedInfoElement3.value = '';
+        //         updatedStudentInfo['branch'] = updatedInfoElement3;
 
-                const updatedInfoElement4 = {
-                    ...updatedStudentInfo['semester']
-                } 
-                updatedInfoElement4.value = '';
-                updatedStudentInfo['semester'] = updatedInfoElement4;
+        //         const updatedInfoElement4 = {
+        //             ...updatedStudentInfo['semester']
+        //         } 
+        //         updatedInfoElement4.value = '';
+        //         updatedStudentInfo['semester'] = updatedInfoElement4;
 
-                const updatedInfoElement5 = {
-                    ...updatedStudentInfo['bookId']
-                } 
-                updatedInfoElement5.value = '';
-                updatedStudentInfo['bookId'] = updatedInfoElement4;
+        //         const updatedInfoElement5 = {
+        //             ...updatedStudentInfo['bookId']
+        //         } 
+        //         updatedInfoElement5.value = '';
+        //         updatedStudentInfo['bookId'] = updatedInfoElement4;
 
-                const updatedInfoElement6 = {
-                    ...updatedStudentInfo['dateOfIssue']
-                } 
-                updatedInfoElement6.value = '';
-                updatedStudentInfo['dateOfIssue'] = updatedInfoElement6;
+        //         const updatedInfoElement6 = {
+        //             ...updatedStudentInfo['dateOfIssue']
+        //         } 
+        //         updatedInfoElement6.value = '';
+        //         updatedStudentInfo['dateOfIssue'] = updatedInfoElement6;
 
 
-                this.setState({studentInfo: updatedStudentInfo, studentBooks: arr});
-                this.setState({loading: false});
-            })
-            .catch(err => {
-                console.log(err);
-                this.setState({loading: false});
-            });
+        //         this.setState({studentInfo: updatedStudentInfo, studentBooks: arr});
+        //         this.setState({loading: false});
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //         this.setState({loading: false});
+        //     });
     }
 
     searchSubmitHandler = (event) => {
@@ -321,7 +320,8 @@ class IssueBooks extends Component {
                             changed={(event) => this.searchInputChangedHandler(event)}
                             invalid={!this.state.searchData.valid} 
                             touched={this.state.searchData.touched} 
-                            disabled={!this.state.formIsValid} />
+                            disabled={!this.state.formIsValid} 
+                            label="Enter student roll no." />
 
                 <div className={classes.IssueBooks}>
                     <h4>Issue the book</h4>
