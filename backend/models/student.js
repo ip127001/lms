@@ -10,23 +10,21 @@ const studentSchema = new Schema({
         type: String,
         required: true
     },
-    branch: {
-        type: String,
-        required: true
-    },
     semester: {
         type: Number,
         required: true
     },
-    books: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Book'
-        }
-    ],
+    branch: {
+        type: String,
+        required: true
+    },
+    books: {
+        type: Array,
+        default: []
+    },
     totalFine: {
         type: Number,
-        required: true
+        default: 0
     }
 }, {timestamps: true});
 
