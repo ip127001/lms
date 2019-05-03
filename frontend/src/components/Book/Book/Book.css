@@ -1,0 +1,143 @@
+.Books {
+    margin-bottom: 3px;
+}
+.Book {
+    margin: auto;  
+    width: 80%;
+    text-align: left;
+    border: 1px solid rgb(219, 219, 219);
+    background-color: rgb(245, 245, 245);
+    height: 40px;
+}
+.Clicked {
+    color: rgb(36, 134, 151);
+    visibility: hidden;
+    opacity: 0;
+    height: 0px;
+    transition: visibility 0.4s, opacity 0.4s, height 0.4s ease-in-out;
+    margin: auto;  
+    width: 80%;
+    text-align: left;
+    border: 1px solid rgb(219, 219, 219);
+    background-color: white;
+    border-collapse: collapse;  
+}
+.NewClicked {
+    color: rgb(36, 134, 151);
+    visibility: visible;
+    height: 50px;
+    opacity: 1;
+    transition: visibility 0.4s, opacity 0.4s, height 0.4s ease-in-out;
+    margin: auto;  
+    width: 80%;
+    text-align: left;
+    border: 1px solid rgb(219, 219, 219);
+    background-color: white;
+    border-collapse: collapse;
+}
+
+.Book:hover {
+    cursor: pointer;
+}
+.Info1 {
+    float: left;  
+    margin: auto;  
+    width: 50%;
+    box-sizing: border-box;
+    padding: 1%;
+}
+.Info2 {
+    float: left;  
+    margin: auto;  
+    width: 30%;
+    box-sizing: border-box;
+    padding: 1%;
+}
+.Info3 {
+    float: left;  
+    margin: auto;  
+    width: 20%;
+    box-sizing: border-box;
+    padding: 1%;
+}
+
+.NewClicked .book1{
+    visibility: visible;
+    transition: visibility 0.4s linear;
+    float: left;  
+    margin: auto;  
+    width: 30%;
+    padding: 1%;
+}
+.NewClicked .book2 {
+    visibility: visible;
+    transition: visibility 0.4s linear;
+    float: left;  
+    margin: auto;  
+    width: 30%;
+    padding: 1%;
+}
+.NewClicked .book3 {
+    visibility: visible;
+    transition: visibility 0.4s linear;
+    float: left;  
+    margin: auto;  
+    width: 10%;
+    padding: 1%;
+}
+
+.NewClicked .book4 {
+    visibility: visible;
+    transition: visibility 0.4s linear;
+    float: left;  
+    margin: auto;  
+    width: 30%;
+    padding: 1%;
+}
+
+.Clicked .book1{
+    visibility: hidden;
+    transition: visibility 0.4s linear;
+    display: none;
+    float: left;  
+    margin: auto;  
+    width: 30%;
+    padding: 1%;
+}
+.Clicked .book2 {
+    visibility: hidden;
+    transition: visibility 0.4s linear;
+    display: none;
+    float: left;  
+    margin: auto;  
+    width: 30%;
+    padding: 1%;
+}
+.Clicked .book3 {
+    visibility: hidden;
+    transition: visibility 0.4s linear;
+    display: none;
+    float: left;  
+    margin: auto;  
+    width: 10%;
+    padding: 1%;
+}
+
+.Clicked .book4 {
+    visibility: hidden;
+    transition: visibility 0.4s linear;
+    display: none;
+    float: left;  
+    margin: auto;  
+    width: 30%;
+    padding: 1%;
+}
+
+.NewClicked .Button {
+        background-color: rgb(67, 163, 155); /* Green */
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+}
