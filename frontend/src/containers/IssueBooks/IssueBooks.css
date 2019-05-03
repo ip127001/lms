@@ -1,6 +1,7 @@
 .IssueBooks {
-    margin-top: 2%;
-    width: 100%;
+    margin: auto;  
+    width: 95%;
+    margin-bottom: 20px;
     text-align: center;
     box-shadow: 0 2px 3px #ccc;
     border: 1px solid #eee;
@@ -11,9 +12,9 @@
 
 @media (min-width: 600px) {
     .IssueBooks {
-        width: 90%;
-        float: left;
-        margin-left: 5%;
+        width: 80%;
+        margin:auto;
+        margin-bottom: 50px;
     }
 }
 
