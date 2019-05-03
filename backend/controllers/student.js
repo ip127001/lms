@@ -37,7 +37,7 @@ exports.postStudentInfo = (req, res, next) => {
                     book.isAvailable = false;
                     book.reissueDate = issueDate;
                     book.save().then(book => {
-                        const bookName = book.author;
+                        const bookName = book.name;
                         Student.findOne({roll: rollNumber})
                             .then(student => {
                                 let newArray = student.books;
@@ -101,26 +101,26 @@ exports.postBookinfo = (req, res, next) => {
     const fine = req.body.fine;
     const tag = req.body.tag;
 
-    const book = new Book({
-        name: name,
-        subject: subject,
-        id: id,
-        author: author,
-        fine: fine,
-        tag: tag
-    });
-
-    book.save()
-        .then(result => {
-            res.status(200).json({
-                message: 'book added successfully',
-                result: result
-            })
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-            err.statusCode = 500;
-            }
-            next(err);
-        });
+                const book = new Book({
+                    name: name,
+                    subject: subject,
+                    idBook: id,
+                    author: author,
+                    fine: fine,
+                    tag: tag
+                });
+                book.save()
+                .then(result => {
+                    res.status(201).json({
+                        message: 'book added successfully',
+                        result: result
+                    })
+                })
+                .catch(err => {
+                    if (!err.statusCode) {
+                    err.statusCode = 500;
+                    }
+                    next(err);
+                });
+            
 }
