@@ -11,6 +11,13 @@
     float: left;
     margin: 4px 0px;
 }
+@media (max-width: 600px) {
+    .Input {
+        margin: 0 1%;
+        padding: 10px;
+        width: 48%;
+    }
+}
 
 .InputElement {
     outline: none;
