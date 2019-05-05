@@ -24,6 +24,7 @@ class BooksSearch extends Component {
         filter: 'tag',
         books: [],
         clickedBook: false,
+        idBook: null,
         loading: false
     }
 
@@ -72,11 +73,12 @@ class BooksSearch extends Component {
             });
     }
 
-    selectedBookHandler(name) {
-        console.log('name', name);
+    selectedBookHandler = (id) => {
+        console.log(id);
         let click = !this.state.clickedBook;
-        this.setState({clickedBook: click});
+        this.setState({clickedBook: click, idBook: id});
     }
+
     render() {
         let books = null;
         books = this.state.books.map(book => {
@@ -84,7 +86,8 @@ class BooksSearch extends Component {
                         bookInfo={book} 
                         key={book.id} 
                         click={this.state.clickedBook} 
-                        clicked={this.selectedBookHandler.bind(this, book.name)}/>
+                        idBook={this.state.idBook}
+                        clicked={this.selectedBookHandler.bind(this, book.id)}/>
         })
 
         return( 

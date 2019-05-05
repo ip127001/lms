@@ -10,9 +10,10 @@ const studentBooks = (props) => {
         avail = 'No'
     }
     let clickedClass = classes.Clicked;
-    if(props.click) {
+    if(props.click && props.idBook === props.bookInfo.id) {
         clickedClass = classes.NewClicked;
     }
+
     return (
         <div className={classes.Books}>
             <div className={classes.Book} onClick={props.clicked}>
@@ -22,16 +23,10 @@ const studentBooks = (props) => {
             </div>
 
             <div className={clickedClass}>
-                <div className={classes.book1}>Name:{props.bookInfo.name}</div>
-                <div className={classes.book2}>ID:{props.bookInfo.id}</div>
-                <div className={classes.book3}>
-                    <button className={classes.Button} 
-                            disabled={!props.bookInfo.isAvailable} 
-                            style={{cursor: !props.bookInfo.isAvailable ? "not-allowed": "pointer", 
-                                    backgroundColor: !props.bookInfo.isAvailable ? "grey": "rgb(67, 163, 155)"}}>
-                    Lock</button>
-                    </div> 
-                <div className={classes.book4}>Available: {avail}</div>
+                <span>Name: {props.bookInfo.name}</span>
+                <span>ID: {props.bookInfo.id}</span>
+                <span><button className={classes.Button}>Lock</button></span>
+                <span>Available: {avail}</span>
             </div>
         </div>
     )
