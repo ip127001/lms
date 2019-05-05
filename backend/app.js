@@ -7,6 +7,7 @@ const multer = require('multer');
 const cron = require('node-cron');
 
 const bookRoutes = require('./routes/book');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/book', bookRoutes);
+app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
