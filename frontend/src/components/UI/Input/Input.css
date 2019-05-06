@@ -1,6 +1,6 @@
 .Input {
-    width: 45%;
-    margin: 0 2%;
+    width: 80%;
+    margin: 0 10%;
     padding: 20px;
     box-sizing: border-box;
     float: left;
@@ -15,7 +15,7 @@
     .Input {
         margin: 0 1%;
         padding: 10px;
-        width: 48%;
+        width: 100%;
     }
 }
 
@@ -28,13 +28,13 @@
     float: left;
     width: 100%;
     box-sizing: border-box;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 .InputElement:focus{
     outline: none;
     background-color: white;
-    border: 1px solid blue;
+    border: 1px solid rgb(34, 87, 122);
 }
 
 .Invalid {
