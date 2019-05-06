@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 exports.signup = (req, res, next) => {
+    console.log('backedn controller');
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const error = new Error('validation failed');
@@ -24,6 +26,7 @@ exports.signup = (req, res, next) => {
             return user.save();
         })
         .then(result => {
+            console.log('result', result);
             res.status(200).json({message: 'user Created', userId: result._id})
         })
         .catch(err => {
@@ -31,7 +34,7 @@ exports.signup = (req, res, next) => {
                 err.statusCode = 500;
             }
             next(err)
-        })
+        });
 }
 
 exports.login = (req, res, next) => {
@@ -55,9 +58,10 @@ exports.login = (req, res, next) => {
             }
             const token = jwt.sign({
                 email: loadedUser.email,
-                userId: loadedUser._id.toString()
+                userId: loadedUser._id.toString(),
+                isUser: loadedUser.isUser
                 },
-                'somesupersecret',
+                'secrethosktahai',
                 { expiresIn: '1h' }
             );
             res.status(200).json({token: token, userId: loadedUser._id.toString()})
