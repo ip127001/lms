@@ -5,9 +5,10 @@ import NavigationItem from './NavigationItem/NavigationItem';
 
 const navigationItems = (props) => (
     <ul className={classes.NavigationItems}>
-        <NavigationItem link="/" exact>IssueBooks</NavigationItem>
-        <NavigationItem link="/student">RegisterBooks</NavigationItem>
-        <NavigationItem link="/books">BooksSearch</NavigationItem>
+        {props.isAuth ? <NavigationItem link="/" exact>IssueBooks</NavigationItem> : <NavigationItem link="/" exact>Login</NavigationItem>}
+        {props.isAuth ? <NavigationItem link="/student">RegisterBooks</NavigationItem> : null}
+        {props.isAuth ? <NavigationItem link="/books">BooksSearch</NavigationItem> : null}
+        {props.isAuth ? <NavigationItem link="/logout" onLogout={props.onLogout}>Logout</NavigationItem> : <NavigationItem link="/signup">Signup</NavigationItem>}
     </ul>
 );
 
