@@ -15,7 +15,7 @@ const userSchema = new Schema({
         required: true
     },
     isUser: {
-        type: String,
+        type: Boolean,
         default: true
     }
 });
