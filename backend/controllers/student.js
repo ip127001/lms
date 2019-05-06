@@ -101,26 +101,26 @@ exports.postBookinfo = (req, res, next) => {
     const fine = req.body.fine;
     const tag = req.body.tag;
 
-                const book = new Book({
-                    name: name,
-                    subject: subject,
-                    idBook: id,
-                    author: author,
-                    fine: fine,
-                    tag: tag
-                });
-                book.save()
-                .then(result => {
-                    res.status(201).json({
-                        message: 'book added successfully',
-                        result: result
-                    })
-                })
-                .catch(err => {
-                    if (!err.statusCode) {
-                    err.statusCode = 500;
-                    }
-                    next(err);
-                });
+    const book = new Book({
+        name: name,
+        subject: subject,
+        idBook: id,
+        author: author,
+        fine: fine,
+        tag: tag
+    });
+    book.save()
+    .then(result => {
+        res.status(201).json({
+            message: 'book added successfully',
+            result: result
+        })
+    })
+    .catch(err => {
+        if (!err.statusCode) {
+        err.statusCode = 500;
+        }
+        next(err);
+    });
             
 }
