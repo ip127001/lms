@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 
 module.exports = (req, res, next) => {
+    console.log('authorization middleware');
     const authHeader = req.get('Authorization');
     console.log('authheader', authHeader);
     if (!authHeader) {
@@ -11,7 +13,7 @@ module.exports = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     let decodedToken; 
     try {
-        decodedToken = jwt.verify(token, 'somesupersecret');
+        decodedToken = jwt.verify(token, 'secrethosktahai');
     } catch(err) {
         err.statusCode = 500;
         throw err;
@@ -22,5 +24,7 @@ module.exports = (req, res, next) => {
         throw error;
     }
     req.userId = decodedToken.userId;
+    req.isUser = decodedToken.isUser;
+    console.log('decodedToken', decodedToken);
     next();
 }
