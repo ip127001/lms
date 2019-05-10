@@ -1,0 +1,10 @@
+.Notice {
+    margin: 200px auto;
+    width: 60%;
+    text-align: center;
+    box-shadow: 0 2px 3px #ccc;
+    border: 1px solid #eee;
+    padding: 2%;
+    box-sizing: border-box;
+    display: center;
+}
