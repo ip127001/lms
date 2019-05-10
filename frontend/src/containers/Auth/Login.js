@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import classes from './Login.css'
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import { checkValidity } from '../../shared/utility';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
-import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+// import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
 import axios from '../../axios-library';
 
 class Login extends Component {
@@ -42,7 +44,29 @@ class Login extends Component {
             }
         },
         loading: false,
-        formIsValid: false
+        formIsValid: false,
+        isVerified: true,
+        message: null,
+        errorMessage: null
+    }
+
+    componentDidMount() {
+        if(this.props.match.params.token) {
+            console.log(this.props.match.params.token);
+            this.setState({loading: true});
+            const token = this.props.match.params.token;
+            axios.post('http://localhost:8080/auth/token', {token: token})
+                .then(result => {
+                    console.log('result', result);
+                    this.setState({isVerified: true, loading: false, message: result.data.message});
+                })
+                .catch(err => {
+                    console.log(err.message);
+                    this.setState({isVerified: false, loading: false});
+                })
+        } else {
+            this.setState({isVerified: true, message: 'do login'})
+        }
     }
 
     formInputHandler = (event, inputIdentifier) => {
@@ -96,11 +120,13 @@ class Login extends Component {
         )
         return (
             <div className={classes.Login}>
+                {this.state.message}
+                {this.state.isVerified ? null : <Redirect to="/" />}
                 <h4>Login</h4>
-                {form}
+                {this.state.loading ? <Spinner /> : form}
             </div>
         )
     }
 }
 
-export default WithErrorHandler(Login, axios);
+export default Login;
