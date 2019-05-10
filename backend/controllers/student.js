@@ -32,6 +32,7 @@ exports.postStudentInfo = (req, res, next) => {
     
     Book.findOne({id: bookId})
         .then(book => {
+            console.log('no book found')
             if(book) {
                 if(book.isAvailable) {
                     book.isAvailable = false;
@@ -104,7 +105,7 @@ exports.postBookinfo = (req, res, next) => {
     const book = new Book({
         name: name,
         subject: subject,
-        idBook: id,
+        id: id,
         author: author,
         fine: fine,
         tag: tag
