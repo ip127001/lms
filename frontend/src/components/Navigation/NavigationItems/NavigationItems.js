@@ -12,9 +12,11 @@ const navigationItems = (props) => {
 
             {props.isAuth && props.isAdmin ? <NavigationItem link="/student">RegisterBooks</NavigationItem> : null}
             {props.isAuth && props.isAdmin ? <NavigationItem link="/books">BooksSearch</NavigationItem> : null}
-            {props.isAuth && props.isAdmin ? <NavigationItem link="/admin">CreateAdmin</NavigationItem> : null}
+            {props.isAuth && props.isAdmin ? <NavigationItem link="/admin">SubAdmin</NavigationItem> : null}
+            {props.isAuth && props.isAdmin ? <NavigationItem link="/create-student">Student</NavigationItem> : null}
+            {props.isAuth ? null : <NavigationItem link="/login">Login</NavigationItem>}
+            {props.isAuth ? null : <NavigationItem link="/" exact>Home</NavigationItem>}
             {props.isAuth ? <NavigationItem link="/logout" onLogout={props.onLogout}>Logout</NavigationItem> : <NavigationItem link="/signup">Signup</NavigationItem>}
-            {props.isAuth ? null : <NavigationItem link="/" exact>Login</NavigationItem>}
         </ul>
     );
 }
