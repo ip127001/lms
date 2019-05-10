@@ -1,7 +1,39 @@
 const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport')
+const crypto = require('crypto');
+
 const User = require('../models/user');
+const College = require('../models/college');
+
+const transporter = nodemailer.createTransport(sendgridTransport({
+    auth: {
+        api_key: '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'
+    }
+}));
+
+exports.verifyUser = (req, res, next) => {
+    console.log('verifyUser');
+    console.log('params token', req.body.token);
+    const token = req.body.token;
+    User.findOne({authToken: token})
+        .then(user => {
+            user.isVerified = true;
+            return user.save();
+        })
+        .then(result => {
+            console.log(result);
+            res.status(200).json({message: 'user verified', result: result})
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 404;
+            }
+            next(err)
+        })
+}
 
 exports.signup = (req, res, next) => {
     console.log('backedn controller');
@@ -26,8 +58,38 @@ exports.signup = (req, res, next) => {
             return user.save();
         })
         .then(result => {
-            console.log('result', result);
-            res.status(200).json({message: 'user Created', userId: result._id})
+            crypto.randomBytes(32, (err, buffer) => {
+                if (err) {
+                    console.log(err);
+                    const error = new Error('Signup failed');
+                    error.status = 422;
+                    error.data = errors.array();
+                    throw error;
+                }
+                const token = buffer.toString('hex');
+                User.findOne({email: email})
+                    .then(user => {
+                        if(!user) {
+                            console.log('user not found')
+                        }
+                        user.authToken = token;
+                        return user.save();
+                    })
+                    .then(result => {
+                        console.log('result', result);
+                        res.status(200).json({message: 'user Created', userId: result._id})
+                        transporter.sendMail({
+                            to: email,
+                            from: 'lms@college.com',
+                            subject: 'Go to login page',
+                            html: `<h1>You successfully signed up</h1>
+                                    <p>click on this <a href="http://localhost:3000/auth/${token}">link</a> to go to the login page</p>` 
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            })
         })
         .catch(err => {
             if (!error.statusCode) {
@@ -72,15 +134,25 @@ exports.adminSignup = (req, res, next) => {
         });
 }
 
+
+
 exports.login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     User.findOne({ email: email })
         .then(user => {
             if(!user) {
-                const error = new Error('A user not found with that email');
-                error.statusCode = 401;
-                throw error;
+                const error = new Error();
+                error.statusCode = 404;
+                error.message = 'A user not found with that email';
+                next(error);
+            }
+            if(!user.isVerified) {
+                console.log('yha aya tha me')
+                const error = new Error();
+                error.message = 'User is not verified with the email address';
+                error.statusCode = 403;
+                next(error);
             }
             loadedUser = user;
             return bcrypt.compare(password, user.password)
