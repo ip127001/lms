@@ -20,6 +20,10 @@ router.post('/signup', [
 
 router.post('/login', authController.login);
 
+router.post('/token', authController.verifyUser);
+
 router.post('/admin/signup', authController.adminSignup);
+
+router.post('/student/signup', authController.studentSignup);
 
 module.exports = router;
