@@ -49,10 +49,11 @@ app.use('/book', bookRoutes);
 app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
+    console.log('error me hu me')
+    console.log('error', error);
     const status = error.statusCode || 500;
     const message = error.message;
-    const data = error.data;
-    res.status().json({message: message, data: data});
+    res.status().json({message: message});
 });
 
 mongoose.connect('mongodb+srv://rk:9pnwE86CrIBYXaWH@ecommerce-rs4wl.mongodb.net/library?retryWrites=true')
