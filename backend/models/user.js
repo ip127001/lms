@@ -14,6 +14,13 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    authToken: {
+        type: String
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
     isUser: {
         type: Boolean,
         default: true
