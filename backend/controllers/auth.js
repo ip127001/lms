@@ -135,6 +135,32 @@ exports.adminSignup = (req, res, next) => {
 }
 
 
+exports.studentSignup = (req, res, next) => {
+    console.log('studentSignup controller');
+    console.log(req.body);
+    const email = req.body.email;
+    const name = req.body.name;
+    const roll = req.body.roll;
+
+    const college = new College({
+        email: email,
+        name: name,
+        roll: roll
+    });
+    college.save()
+    .then(result => {
+        res.status(201).json({
+            message: 'student added successfully',
+            result: result
+        });
+    })
+    .catch(err => {
+        if (!err.statusCode) {
+        err.statusCode = 500;
+        }
+        next(err);
+    });
+}
 
 exports.login = (req, res, next) => {
     const email = req.body.email;
