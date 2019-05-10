@@ -5,14 +5,16 @@ import classes from './studentBooks.css';
 const studentBooks = (props) => {
     let tableContent;
     if(props.books) {
-        tableContent = props.books.map(book => (
+        tableContent = props.books.map(book => {
+            console.log(book)
+            return (
             <tr key={book.bookId}>
                 <td>{book.bookName}</td>
                 <td>{book.bookId}</td>
                 <td>{book.fine}</td>
                 <td>{book.reIssueDate}</td>
-            </tr>
-        ));
+            </tr>);
+        });
     } else {
         tableContent = (
             <tr>
