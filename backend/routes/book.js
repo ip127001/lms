@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/students', studentController.postStudentInfo);
 
-router.post('/search', isAuth, studentController.getStudentInfo);
+router.post('/search', studentController.getStudentInfo);
 
 router.post('/newBook', studentController.postBookinfo);
 
