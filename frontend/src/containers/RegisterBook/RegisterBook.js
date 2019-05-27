@@ -26,7 +26,7 @@ class StudentInfo extends Component {
                 valid: false,
                 touched: false
             },
-            id: {
+            idBook: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'number',

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import classes from './Login.css'
 
@@ -8,7 +7,7 @@ import Button from '../../components/UI/Button/Button';
 import { checkValidity } from '../../shared/utility';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-// import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
 import axios from '../../axios-library';
 
 class Login extends Component {
@@ -45,7 +44,7 @@ class Login extends Component {
         },
         loading: false,
         formIsValid: false,
-        isVerified: true,
+        isVerified: false,
         message: null,
         errorMessage: null
     }
@@ -65,7 +64,7 @@ class Login extends Component {
                     this.setState({isVerified: false, loading: false});
                 })
         } else {
-            this.setState({isVerified: true, message: 'do login'})
+            this.setState({isVerified: false, message: 'do login'})
         }
     }
 
@@ -90,6 +89,7 @@ class Login extends Component {
     }
 
     render() {
+        // let errorMsg = <p style={{border: "1px solid red", borderRadius: '4px', padding: "10px", color: "red", width: "50%", margin: "5px auto"}}> {this.props.error}</p>
         let formElementArray = [];
         for(let key in this.state.loginForm) {
             formElementArray.push({
@@ -120,8 +120,8 @@ class Login extends Component {
         )
         return (
             <div className={classes.Login}>
-                {this.state.message}
-                {this.state.isVerified ? null : <Redirect to="/" />}
+                {this.state.message}<br></br>
+                {this.state.isVerified}
                 <h4>Login</h4>
                 {this.state.loading ? <Spinner /> : form}
             </div>
@@ -129,4 +129,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default WithErrorHandler(Login, axios);

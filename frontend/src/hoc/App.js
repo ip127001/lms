@@ -10,9 +10,11 @@ import LoginPage from '../containers/Auth/Login';
 
 import axios from '../axios-library';
 import StudentProfile from '../containers/StudentProfile/StudentProfile';
+import Profile from '../containers/StudentProfile/Profile/Profile';
 import CreateAdmin from '../containers/CreateAdmin/CreateAdmin';
 import Notice from '../containers/Home/Notice';
 import CreateStudent from '../containers/CreateAdmin/CreateStudent/CreateStudent';
+import ReturnBooks from '../containers/ReturnBooks/ReturnBooks';
 
 class App extends Component {
   state = {
@@ -78,7 +80,7 @@ class App extends Component {
         this.setState({
           isAuth: false,
           authLoading: false,
-          error: err
+          error: 'signup failed make sure you are registered with college'
         });
       });
   };
@@ -156,6 +158,13 @@ class App extends Component {
 
     axios.post('/auth/login', loginData)  
       .then(res => {
+        console.log('response page of login')
+        if (res.status === 403) {
+          console.log('403 me hu frontend')
+          console.log('status', res.status);
+          this.setState({error: res.message});
+          throw new Error('User is not verified with that email address');
+        }
         if (res.status === 422) {
           throw new Error('Validation failed.');
         }
@@ -180,13 +189,15 @@ class App extends Component {
         );
         localStorage.setItem('expiryDate', expiryDate.toISOString());
         this.setAutoLogout(remainingMilliseconds);
+        this.props.history.replace('/');
       })
       .catch(err => {
-        console.log(err);
+        console.log('error page of login')
+        console.log(err.response);
         this.setState({
           isAuth: false,
           authLoading:  false,
-          error: err
+          error: 'verify yourself'
         });
       });
   };
@@ -215,12 +226,12 @@ class App extends Component {
         />
         <Route path="/auth/:token"
           render={props => (
-            <LoginPage {...props} onLogin={this.loginHandler} loading={this.state.authLoading} />
+            <LoginPage {...props} error={this.state.error} onLogin={this.loginHandler} loading={this.state.authLoading} />
           )}
         />
         <Route path="/login" exact
           render={props => (
-            <LoginPage {...props} onLogin={this.loginHandler} loading={this.state.authLoading} />
+            <LoginPage {...props} error={this.state.error} onLogin={this.loginHandler} loading={this.state.authLoading} />
           )}
         />
         <Route path="/signup"
@@ -233,12 +244,17 @@ class App extends Component {
     )
 
     if(this.state.isAuth && this.state.isUser) {
-      console.log('phla', this.state.isUser)
+      console.log('student', this.state.isUser)
       routes = (
         <Switch>
+          <Route 
+                path="/profile" 
+                exact 
+                render={props => (
+                  <Profile {...props} userId={this.state.userId} token={this.state.token} />
+            )} />
             <Route 
                 path="/" 
-                exact 
                 render={props => (
                   <StudentProfile {...props} userId={this.state.userId} token={this.state.token} />
             )} />
@@ -247,7 +263,7 @@ class App extends Component {
     }
     
     if(this.state.isAuth && !this.state.isUser){
-      console.log('doosra', this.state.isUser)
+      console.log('admin', this.state.isUser)
       routes = (
         <Switch>
             <Route 
@@ -255,6 +271,11 @@ class App extends Component {
                 exact 
                 render={props => (
                   <IssueBooks {...props} userId={this.state.userId} token={this.state.token} />
+            )} />
+            <Route  
+                path="/return-books"  
+                render={props => (
+                  <ReturnBooks {...props} userId={this.state.userId} token={this.state.token} />
             )} />
             <Route 
                 path="/student" 

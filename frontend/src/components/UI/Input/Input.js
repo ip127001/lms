@@ -4,23 +4,11 @@ import classes from './Input.css';
 
 const Input = (props) => {
     let inputElement = null;
-    let validationError = null;
     let label = null;
     const inputClasses = [classes.InputElement]
 
     if (props.touched && props.invalid && props.shouldValidate) {
         inputClasses.push(classes.Invalid);
-        if (!props.shouldValidate.minLength) {
-            validationError = <p className={classes.ValidationError}>
-                            Enter a valid <strong>{props.label}</strong> with 
-                            maxLength of {props.shouldValidate.maxLength}
-                        </p>;
-        } else {
-            validationError = <p className={classes.ValidationError}>
-                            Enter a valid <strong>{props.label}</strong> with 
-                            minLength of {props.shouldValidate.minLength}
-        </p>;
-        } 
     }
 
     switch(props.elementType) {
@@ -67,7 +55,6 @@ const Input = (props) => {
         <div className={classes.Input}>
             <label className={classes.Label}>{label}</label>
             {inputElement}
-            {validationError}
         </div>
     )
 }

@@ -22,6 +22,10 @@ const studentSchema = new Schema({
         type: Array,
         default: []
     },
+    reissuedBooks: {
+        type: Array,
+        default: []
+    },
     totalFine: {
         type: Number,
         default: 0
