@@ -1,23 +1,24 @@
 .Button {
     display: inline-block;
     border-radius: 4px;
-    background-color: #f4511e;
-    border: none;
-    color: #FFFFFF;
+    border: 1px solid #ccc;
+    color: rgb(59, 110, 25);
     text-align: center;
-    font-size: 18px;
+    font-size: 14px;
     padding: 6px;
-    width: 100px;
+    width: 80px;
     cursor: pointer;
     margin-top: 10px;  
 }
 
 .Success {
+    background-color: rgb(43, 139, 43);
     color: white;
 }
 
 .Danger {
-    color: #944317;
+    background-color: rgb(165, 36, 36);
+    color: white;
 }
 
 .Button:disabled {

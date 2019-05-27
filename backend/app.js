@@ -8,7 +8,7 @@ const cron = require('node-cron');
 
 const bookRoutes = require('./routes/book');
 const authRoutes = require('./routes/auth');
-
+const studentRoutes = require('./routes/student')
 const app = express();
 
 // cron.schedule("1 * * * * *", function() {
@@ -47,13 +47,14 @@ app.use((req, res, next) => {
 
 app.use('/book', bookRoutes);
 app.use('/auth', authRoutes);
+app.use('/student', studentRoutes);
 
 app.use((error, req, res, next) => {
     console.log('error me hu me')
     console.log('error', error);
     const status = error.statusCode || 500;
     const message = error.message;
-    res.status().json({message: message});
+    res.status(status).json({msg: message});
 });
 
 mongoose.connect('mongodb+srv://rk:9pnwE86CrIBYXaWH@ecommerce-rs4wl.mongodb.net/library?retryWrites=true')

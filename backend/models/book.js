@@ -10,7 +10,7 @@ const bookSchema = new Schema({
         type: String,
         required: true
     },
-    id: {
+    idBook: {
         type: Number,
         required: true
     },
@@ -31,7 +31,7 @@ const bookSchema = new Schema({
         default: true
     },
     reissueDate: {
-        type: Date,
+        type: String,
         default: null
     }
 }, {timestamps: true});

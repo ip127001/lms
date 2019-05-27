@@ -10,7 +10,7 @@ const College = require('../models/college');
 
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
-        api_key: 'your_api_key'
+        api_key: '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'
     }
 }));
 
@@ -48,54 +48,81 @@ exports.signup = (req, res, next) => {
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
-    bcrypt.hash(password, 12)
-        .then(hashedPw => {
-            const user = new User({
-                email: email,
-                password: hashedPw,
-                name: name
-            });
-            return user.save();
-        })
-        .then(result => {
-            crypto.randomBytes(32, (err, buffer) => {
-                if (err) {
-                    console.log(err);
-                    const error = new Error('Signup failed');
-                    error.status = 422;
-                    error.data = errors.array();
-                    throw error;
-                }
-                const token = buffer.toString('hex');
-                User.findOne({email: email})
+    College.findOne({email: email})
+        .then(student => {
+            if(student) {
+                console.log(student)
+                User.findOne({email: student.email})
                     .then(user => {
-                        if(!user) {
-                            console.log('user not found')
+                        if (!user) {
+                            bcrypt.hash(password, 12)
+                                .then(hashedPw => {
+                                    const user = new User({
+                                        email: email,
+                                        password: hashedPw,
+                                        name: name
+                                    });
+                                    return user.save();
+                                })
+                                .then(result => {
+                                    crypto.randomBytes(32, (err, buffer) => {
+                                        if (err) {
+                                            console.log(err);
+                                            const error = new Error('Signup failed');
+                                            error.status = 422;
+                                            error.data = errors.array();
+                                            throw error;
+                                        }
+                                        const token = buffer.toString('hex');
+                                        User.findOne({email: email})
+                                            .then(user => {
+                                                user.authToken = token;
+                                                return user.save();
+                                            })
+                                            .then(result => {
+                                                res.status(200).json({message: 'user Created', userId: result._id})
+                                                transporter.sendMail({
+                                                    to: email,
+                                                    from: 'lms@college.com',
+                                                    subject: 'Go to login page',
+                                                    html: `<h1>You successfully signed up</h1>
+                                                            <p>click on this <a href="http://localhost:3000/auth/${token}">link</a> to go to the login page</p>` 
+                                                });
+                                            })
+                                            .catch(err => {
+                                                console.log(err);
+                                            });
+                                    })
+                                })
+                                .catch(err => {
+                                    const error = new Error('Signup failed, already registered with college');
+                                    error.status = 403;
+                                    throw error;
+                                });
+                        } else {
+                            const error = new Error();
+                            error.status = 403;
+                            error.message = 'already registered';
+                            throw error;
                         }
-                        user.authToken = token;
-                        return user.save();
-                    })
-                    .then(result => {
-                        console.log('result', result);
-                        res.status(200).json({message: 'user Created', userId: result._id})
-                        transporter.sendMail({
-                            to: email,
-                            from: 'lms@college.com',
-                            subject: 'Go to login page',
-                            html: `<h1>You successfully signed up</h1>
-                                    <p>click on this <a href="http://localhost:3000/auth/${token}">link</a> to go to the login page</p>` 
-                        });
                     })
                     .catch(err => {
-                        console.log(err);
-                    });
-            })
+                        const error = new Error();
+                        error.status = 403;
+                        error.message = 'error while signup';
+                        throw error;
+                    })
+            } else {
+                res.status(404).json({
+                    message: 'student is not registered with college'
+                });
+            }
         })
         .catch(err => {
-            if (!error.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err)
+            const error = new Error();
+            error.status = 404;
+            error.message = 'user is not registered with college';
+            throw error;
         });
 }
 
@@ -185,7 +212,8 @@ exports.login = (req, res, next) => {
         })
         .then(isEqual => {
             if (!isEqual) {
-                const error = new Error("password doesn't match");
+                const error = new Error();
+                error.message = "password doesn't match";
                 error.statusCode = 401;
                 throw error;
             }

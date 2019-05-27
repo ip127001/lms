@@ -66,8 +66,7 @@ class IssueBooks extends Component {
                 },
                 validation: {
                     required: true,
-                    minLength: 4,
-                    maxLength: 6
+                    minLength: 4
                 },
                 valid: false,
                 touched: false,
@@ -114,6 +113,31 @@ class IssueBooks extends Component {
         loading: false,
         error: false
     }
+
+    // componentDidMount() {
+    //     axios.get('http://localhost:8080/student/reissue-request')
+    //         .then(res => {
+    //             res.data.result[0].books.forEach(book => {
+    //                 let reissueDay = new Date(book.reIssueDate);
+    //                 let today = new Date();
+    //                 const diffTime = reissueDay.getTime() - today.getTime();
+    //                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    //                 if(diffDays > 0) {
+    //                     book.fine = diffDays
+    //                 } else if(diffDays === 0) {
+    //                     book.fine = 0;
+    //                 } else {
+    //                     book.fine = 0;
+    //                 }
+    //                 console.log(diffDays, book);
+    //                 book.userId = this.props.userId;
+    //                 axios.post('http://localhost:8080/student/book-fine', book)
+    //                     .then(res => console.log(res))
+    //                     .catch(err => console.log(err))
+    //             });
+    //         })
+    //         .catch(err => console.log(err))
+    // }
 
     IssueHandler = () => {
         this.setState({issuing: true})
@@ -170,6 +194,7 @@ class IssueBooks extends Component {
                     console.log(book);
                     return arr.push(book);
                 });
+
                 const updatedStudentInfo = {
                     ...this.state.studentInfo,
                 }
@@ -179,12 +204,6 @@ class IssueBooks extends Component {
                 } 
                 updatedInfoElement1.value = '';
                 updatedStudentInfo['name'] = updatedInfoElement1;
-                
-                const updatedInfoElement2 = {
-                    ...updatedStudentInfo['roll']
-                } 
-                updatedInfoElement2.value = '';
-                updatedStudentInfo['roll'] = updatedInfoElement2;
 
                 const updatedInfoElement3 = {
                     ...updatedStudentInfo['branch']
@@ -210,7 +229,6 @@ class IssueBooks extends Component {
                 updatedInfoElement6.value = '';
                 updatedStudentInfo['dateOfIssue'] = updatedInfoElement6;
 
-
                 this.setState({studentInfo: updatedStudentInfo, studentBooks: arr});
                 this.setState({loading: false});
             })
@@ -220,6 +238,10 @@ class IssueBooks extends Component {
             });
     }
 
+    // result.data.studentInfo.books.map(book => {
+                    
+    //     return book.fine;
+    // })
     searchSubmitHandler = (event) => {
         event.preventDefault();
         this.setState({loading: true});
@@ -264,7 +286,7 @@ class IssueBooks extends Component {
 
                 let arr = [];
                 result.data.studentInfo.books.map(book => {
-                    console.log(book);
+                    console.log('searchhandler', book);
                     return arr.push(book);
                 });
                 
@@ -275,11 +297,61 @@ class IssueBooks extends Component {
 
                 this.setState({studentInfo: updatedStudentInfo, studentBooks: arr, searchData: updatedSearchData});
                 this.setState({loading: false});
+
+
+                axios.get('http://localhost:8080/student/reissue-request')
+                .then(res => {
+                    console.log('get back data', res.data.result[0].books)
+                    res.data.result[0].books.forEach(async book => {
+                        let reissueDay = new Date(book.reIssueDate);
+                        let today = new Date();
+                        const diffTime = today.getTime() - reissueDay.getTime();
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                        if(diffDays > 0) {
+                            book.fine = Math.abs(diffDays)
+                        } else if(diffDays === 0) {
+                            book.fine = 0;
+                        } else {
+                            book.fine = 0;
+                        }
+                        book.roll = result.data.studentInfo.roll;
+                        console.log('book 12', book);
+                        const data = await axios.post('http://localhost:8080/student/book-fine', book)
+                        console.log(data);
+                    })
+                })
+                .catch(err => console.log(err));
+
             })
             .catch(err => {
                 console.log(err);
                 this.setState({loading: false, error: true})
             });
+    }
+
+    componentDidUpdate() {
+        axios.get('http://localhost:8080/student/reissue-request')
+                .then(res => {
+                    console.log('get back data', res.data.result[0].books)
+                    res.data.result[0].books.forEach(async book => {
+                        let reissueDay = new Date(book.reIssueDate);
+                        let today = new Date();
+                        const diffTime = today.getTime() - reissueDay.getTime();
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                        if(diffDays > 0) {
+                            book.fine = Math.abs(diffDays)
+                        } else if(diffDays === 0) {
+                            book.fine = 0;
+                        } else {
+                            book.fine = 0;
+                        }
+                        book.roll = this.state.studentInfo.roll;
+                        console.log('book 12', book);
+                        const data = await axios.post('http://localhost:8080/student/book-fine', book)
+                        console.log(data);
+                    })
+                })
+                .catch(err => console.log(err));
     }
 
     render() {
@@ -313,7 +385,7 @@ class IssueBooks extends Component {
         if (this.state.loading) {
             studentBooks = <Spinner />
         } else {
-            studentBooks = <StudentBooks books={this.state.studentBooks} />;
+            studentBooks = <StudentBooks books={this.state.studentBooks} roll={this.state.studentInfo.roll} />;
         }
 
         return( 
