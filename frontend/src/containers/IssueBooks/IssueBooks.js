@@ -329,30 +329,6 @@ class IssueBooks extends Component {
             });
     }
 
-    componentDidUpdate() {
-        axios.get('http://localhost:8080/student/reissue-request')
-                .then(res => {
-                    console.log('get back data', res.data.result[0].books)
-                    res.data.result[0].books.forEach(async book => {
-                        let reissueDay = new Date(book.reIssueDate);
-                        let today = new Date();
-                        const diffTime = today.getTime() - reissueDay.getTime();
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                        if(diffDays > 0) {
-                            book.fine = Math.abs(diffDays)
-                        } else if(diffDays === 0) {
-                            book.fine = 0;
-                        } else {
-                            book.fine = 0;
-                        }
-                        book.roll = this.state.studentInfo.roll;
-                        console.log('book 12', book);
-                        const data = await axios.post('http://localhost:8080/student/book-fine', book)
-                        console.log(data);
-                    })
-                })
-                .catch(err => console.log(err));
-    }
 
     render() {
         let formElementArray = [];
