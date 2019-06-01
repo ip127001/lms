@@ -10,7 +10,7 @@ const College = require('../models/college');
 
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
-        api_key: 'your sendgrid api key'
+        api_key: 'your_api_key'
     }
 }));
 
